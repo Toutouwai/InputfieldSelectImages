@@ -1,0 +1,40 @@
+.InputfieldSelectImages {
+	select[multiple] { display:none; }
+	.isi-select-button { outline:none;
+		&:disabled { background-color:#d8d8d8 !important; cursor:not-allowed; }
+	}
+	// Thumbs
+	.isi-thumb { background-color:white; padding:6px; border:1px solid #d9e1ea; margin:0 10px 10px 0; cursor:pointer; position:relative; border-radius:2px;
+		.image-label { position:absolute; z-index:1; left:6px; right:6px; top:6px; bottom:6px; background:rgba(62,185,152,0.7); display:none;
+			.image-label-text { text-align:center; width:100%; word-wrap:break-word; white-space:normal; line-height:1.2; position:relative; top:50%; transform:translateY(-50%); color:white; font-weight:bold; }
+		}
+		.isi-delete { color:#aaaaaa; width:32px; height:32px; background:white; text-align:center; padding:5px 0 0; position:absolute; left:6px; top:6px; z-index:2; display:none; cursor:pointer;
+			&:hover { color:#e83561; }
+		}
+		img { height:160px; }
+		&:hover {
+			.image-label { display:block; }
+		}
+	}
+	// Selected images
+	.selected-images { display:flex; flex-flow:row wrap; margin-bottom:5px; /*overflow:auto;*/
+		.ui-sortable-placeholder { visibility:visible !important; background:transparent; border-radius:2px; }
+		.empty-label { width:100%;
+			&.hide { display:none; }
+		}
+		.isi-thumb { cursor:move;
+			&:hover {
+				.isi-delete { display:block; }
+			}
+		}
+	}
+	// Selectable images
+	.selectable-images-outer { display:none; }
+	.selectable-images { background-color:#2e2e2e; display:flex; flex-flow:row wrap; padding:10px; padding-bottom:0; margin-top:15px;
+		.isi-thumb {
+			&.selected { cursor:not-allowed;
+				img	{ opacity:0.2; }
+			}
+		}
+	}
+}

@@ -1,0 +1,187 @@
+<?php namespace ProcessWire;
+
+class InputfieldSelectImages extends InputfieldSelectMultiple {
+
+	public static function getModuleInfo() {
+		return array(
+			'title' => 'Select Images',
+			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
+			'version' => '0.1.0',
+			'author' => 'Robin Sallis',
+			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
+			'icon' => 'picture-o',
+			'requires' => 'ProcessWire>=3.0.0, PHP>=5.4.0',
+		);
+	}
+
+	protected $files_manager = null;
+
+	protected $labels = [];
+
+	/**
+	 * Construct
+	 */
+	public function __construct() {
+		parent::__construct();
+		$this->files_manager = $this->wire()->pages->get(1)->filesManager();
+		$this->labels = [
+			'empty' => $this->_('No images selected.'),
+			'open' => $this->_('Select images...'),
+			'open_single' => $this->_('Select image...'),
+			'close' => $this->_('Close'),
+			'max' => $this->_('The maximum number of selected images has been reached.'),
+			'unavailable' => $this->_('There are no images available for selection.'),
+		];
+		$this->set('label_empty', '');
+		$this->set('label_button', '');
+		$this->set('label_max', '');
+		$this->set('label_unavailable', '');
+		$this->set('max_items', 0);
+	}
+
+	/**
+	 * Init
+	 */
+	public function init() {
+		// Add wrap class for same appearance as core InputfieldImage
+		$this->addClass('InputfieldIsSecondary', 'wrapClass');
+	}
+
+	/**
+	 * Render ready
+	 *
+	 * @param Inputfield|InputfieldWrapper|null
+	 * @param bool $renderValueMode
+	 * @return bool
+	 *
+	 */
+	public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
+		$this->wrapAttr('data-max-items', $this->max_items);
+		return parent::renderReady($parent, $renderValueMode);
+	}
+
+	/**
+	 * Get markup for a selectable thumbnail image
+	 *
+	 * @return string
+	 */
+	protected function getThumbMarkup($value, $label) {
+		$attrs = $this->getOptionAttributes($value);
+
+		// Get thumb...
+		$thumb = '';
+		// Use data-thumb attribute if present
+		if(!empty($attrs['data-thumb'])) $thumb = $attrs['data-thumb'];
+		// Otherwise try and get Pageimage and generate thumb
+		if(!$thumb && strpos($value, '.') !== false) {
+			$pageimage = $this->files_manager->getFile($value);
+			if($pageimage) $thumb = $pageimage->maxSize(260,260, ['upscaling' => true])->url;
+		}
+		// Abort if no thumb
+		if(!$thumb) return '';
+
+		// Create markup
+		unset($attrs['selected'], $attrs['checked'], $attrs['value']);
+		$attrs_string = $this->getOptionAttributesString($attrs);
+		$class = 'isi-thumb';
+		if($this->isOptionSelected($value)) $class .= ' selected';
+		$out = "<div class='$class' data-value='$value' data-label='$label' $attrs_string>";
+		if($label) $out .= "<div class='image-label'><div class='image-label-text'>$label</div></div>";
+		$out .= "<div class='isi-delete'><span class='fa fa-trash-o'></span></div>";
+		$out .= "<img src='$thumb' alt=''>";
+		$out .= "</div>";
+		return $out;
+	}
+
+	/**
+	 * Render and return the output for this Select
+	 *
+	 * @return string
+	 *
+	 */
+	public function ___render() {
+		$options = $this->options;
+
+		// Selected images
+		$out = parent::___render();
+		$out .= "<div class='selected-images'>";
+		$empty_label = $this->label_empty ?: $this->labels['empty'];
+		$empty_label_class = $this->value ? ' hide' : '';
+		$out .= "<p class='empty-label{$empty_label_class}'>$empty_label</p>";
+		foreach($this->value as $value) {
+			$label = $options[$value];
+			$out .= $this->getThumbMarkup($value, $label);
+		}
+		$out .= '</div>';
+
+		// Selectable images
+		$selectable = '';
+		foreach($options as $value => $label) {
+			$selectable .= $this->getThumbMarkup($value, $label);
+		}
+		if($selectable) {
+			if($this->label_button) {
+				$button_open_label = $this->label_button;
+			} else {
+				$button_open_label = $this->max_items === 1 ? $this->labels['open_single'] : $this->labels['open'];
+			}
+			$button_max_label = $this->label_max ?: $this->labels['max'];
+			$out .= "<button type='button' class='ui-button isi-select-button' data-open-label='$button_open_label' data-close-label='{$this->labels['close']}' data-max-reached='$button_max_label'>$button_open_label</button>";
+			$out .= "<div class='selectable-images-outer'><div class='selectable-images'>$selectable</div></div>";
+		} else {
+			$out .= $this->label_unavailable ?: $this->labels['unavailable'];
+		}
+
+		return $out;
+	}
+
+	public function ___getConfigInputfields() {
+		$inputfields = parent::___getConfigInputfields();
+		$modules = $this->wire()->modules;
+
+		/** @var InputfieldFieldset $f */
+		$fs = $modules->get('InputfieldFieldset');
+		$fs->label = $this->_('Labels');
+		$fs->collapsed = Inputfield::collapsedYes;
+		$inputfields->add($fs);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_empty';
+		$f->name = $f_name;
+		$f->label = $this->_('Empty');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['empty']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_button';
+		$f->name = $f_name;
+		$f->label = $this->_('Button');
+		$f->notes = sprintf($this->_('Default: "%s", or "%s" if single'), $this->labels['open'], $this->labels['open_single']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_max';
+		$f->name = $f_name;
+		$f->label = $this->_('Maximum reached');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['max']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_unavailable';
+		$f->name = $f_name;
+		$f->label = $this->_('Unavailable');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['unavailable']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		return $inputfields;
+	}
+
+}

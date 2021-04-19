@@ -1,0 +1,84 @@
+.InputfieldSelectImages select[multiple] {
+  display: none; }
+.InputfieldSelectImages .isi-select-button {
+  outline: none; }
+  .InputfieldSelectImages .isi-select-button:disabled {
+    background-color: #d8d8d8 !important;
+    cursor: not-allowed; }
+.InputfieldSelectImages .isi-thumb {
+  background-color: white;
+  padding: 6px;
+  border: 1px solid #d9e1ea;
+  margin: 0 10px 10px 0;
+  cursor: pointer;
+  position: relative;
+  border-radius: 2px; }
+  .InputfieldSelectImages .isi-thumb .image-label {
+    position: absolute;
+    z-index: 1;
+    left: 6px;
+    right: 6px;
+    top: 6px;
+    bottom: 6px;
+    background: rgba(62, 185, 152, 0.7);
+    display: none; }
+    .InputfieldSelectImages .isi-thumb .image-label .image-label-text {
+      text-align: center;
+      width: 100%;
+      word-wrap: break-word;
+      white-space: normal;
+      line-height: 1.2;
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%);
+      color: white;
+      font-weight: bold; }
+  .InputfieldSelectImages .isi-thumb .isi-delete {
+    color: #aaaaaa;
+    width: 32px;
+    height: 32px;
+    background: white;
+    text-align: center;
+    padding: 5px 0 0;
+    position: absolute;
+    left: 6px;
+    top: 6px;
+    z-index: 2;
+    display: none;
+    cursor: pointer; }
+    .InputfieldSelectImages .isi-thumb .isi-delete:hover {
+      color: #e83561; }
+  .InputfieldSelectImages .isi-thumb img {
+    height: 160px; }
+  .InputfieldSelectImages .isi-thumb:hover .image-label {
+    display: block; }
+.InputfieldSelectImages .selected-images {
+  display: flex;
+  flex-flow: row wrap;
+  margin-bottom: 5px;
+  /*overflow:auto;*/ }
+  .InputfieldSelectImages .selected-images .ui-sortable-placeholder {
+    visibility: visible !important;
+    background: transparent;
+    border-radius: 2px; }
+  .InputfieldSelectImages .selected-images .empty-label {
+    width: 100%; }
+    .InputfieldSelectImages .selected-images .empty-label.hide {
+      display: none; }
+  .InputfieldSelectImages .selected-images .isi-thumb {
+    cursor: move; }
+    .InputfieldSelectImages .selected-images .isi-thumb:hover .isi-delete {
+      display: block; }
+.InputfieldSelectImages .selectable-images-outer {
+  display: none; }
+.InputfieldSelectImages .selectable-images {
+  background-color: #2e2e2e;
+  display: flex;
+  flex-flow: row wrap;
+  padding: 10px;
+  padding-bottom: 0;
+  margin-top: 15px; }
+  .InputfieldSelectImages .selectable-images .isi-thumb.selected {
+    cursor: not-allowed; }
+    .InputfieldSelectImages .selectable-images .isi-thumb.selected img {
+      opacity: 0.2; }
