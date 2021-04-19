@@ -22,24 +22,24 @@ The field will store URLs to the Pageimages so it works as a kind of "image refe
 
 ```php
 $wire->addHookAfter('FieldtypeDynamicOptions::getSelectableOptions', function(HookEvent $event) {
-	// The page being edited
-	$page = $event->arguments(0);
-	// The Dynamic Options field
-	$field = $event->arguments(1);
+    // The page being edited
+    $page = $event->arguments(0);
+    // The Dynamic Options field
+    $field = $event->arguments(1);
 
-	// For a field named "select_images"
-	if($field->name === 'select_images') {
-		$options = [];
-		// Get Pageimages within the "images" field on the home page
-		foreach($event->wire()->pages(1)->images as $image) {
-			// Add an option for each Pageimage
-			// When the key is a Pageimage URL the inputfield will automatically create a thumbnail
-			// In this example the label includes the basename and the filesize
-			/** @var Pageimage $image */
-			$options[$image->url] = "{$image->basename}<br>{$image->filesizeStr}";
-		}
-		$event->return = $options;
-	}
+    // For a field named "select_images"
+    if($field->name === 'select_images') {
+        $options = [];
+        // Get Pageimages within the "images" field on the home page
+        foreach($event->wire()->pages(1)->images as $image) {
+            // Add an option for each Pageimage
+            // When the key is a Pageimage URL the inputfield will automatically create a thumbnail
+            // In this example the label includes the basename and the filesize
+            /** @var Pageimage $image */
+            $options[$image->url] = "{$image->basename}<br>{$image->filesizeStr}";
+        }
+        $event->return = $options;
+    }
 });
 ```
 
@@ -51,34 +51,34 @@ In this example the field allows selection of image files in a "/pics/" folder w
 
 ```php
 $wire->addHookAfter('FieldtypeDynamicOptions::getSelectableOptions', function(HookEvent $event) {
-	// The page being edited
-	$page = $event->arguments(0);
-	// The Dynamic Options field
-	$field = $event->arguments(1);
+    // The page being edited
+    $page = $event->arguments(0);
+    // The Dynamic Options field
+    $field = $event->arguments(1);
 
-	// For a field named "select_images"
-	if($field->name === 'select_images') {
-		$options = [];
-		// Get files that are in the /pics/ folder
-		$root = $event->wire()->config->paths->root;
-		$path = $root . 'pics/';
-		$files = $event->wire()->files->find($path);
-		// Add an option for each file
-		foreach($files as $file) {
-			$basename = str_replace($path, '', $file);
-			$url = str_replace($root, '/', $file);
-			// The value must be an array with the following structure...
-			$options[$url] = [
-				// The label for the image
-				'label' => $basename,
-				'attributes' => [
-					// An image URL in the "data-thumb" attribute
-					'data-thumb' => $url,
-				],
-			];
-		}
-		$event->return = $options;
-	}
+    // For a field named "select_images"
+    if($field->name === 'select_images') {
+        $options = [];
+        // Get files that are in the /pics/ folder
+        $root = $event->wire()->config->paths->root;
+        $path = $root . 'pics/';
+        $files = $event->wire()->files->find($path);
+        // Add an option for each file
+        foreach($files as $file) {
+            $basename = str_replace($path, '', $file);
+            $url = str_replace($root, '/', $file);
+            // The value must be an array with the following structure...
+            $options[$url] = [
+                // The label for the image
+                'label' => $basename,
+                'attributes' => [
+                    // An image URL in the "data-thumb" attribute
+                    'data-thumb' => $url,
+                ],
+            ];
+        }
+        $event->return = $options;
+    }
 });
 ```
 
@@ -90,33 +90,33 @@ Also, you can use external URLs for the thumbnails. In the example below the opt
 
 ```php
 $wire->addHookAfter('FieldtypeDynamicOptions::getSelectableOptions', function(HookEvent $event) {
-	// The page being edited
-	$page = $event->arguments(0);
-	// The Dynamic Options field
-	$field = $event->arguments(1);
+    // The page being edited
+    $page = $event->arguments(0);
+    // The Dynamic Options field
+    $field = $event->arguments(1);
 
-	// For a field named "calm_or_crazy"
-	if($field->name === 'calm_or_crazy') {
-		$options = [];
-		// Add options that are illustrated with thumbnails from placecage.com
-		$options['calm'] = [
-			// The label for the option
-			'label' => 'Nicolas Cage is a calm man',
-			'attributes' => [
-				// An image URL in the "data-thumb" attribute
-				'data-thumb' => 'https://www.placecage.com/260/260',
-			]
-		];
-		$options['crazy'] = [
-			// The label for the option
-			'label' => 'Nicolas Cage is a crazy man',
-			'attributes' => [
-				// An image URL in the "data-thumb" attribute
-				'data-thumb' => 'https://www.placecage.com/c/260/260',
-			]
-		];
-		$event->return = $options;
-	}
+    // For a field named "calm_or_crazy"
+    if($field->name === 'calm_or_crazy') {
+        $options = [];
+        // Add options that are illustrated with thumbnails from placecage.com
+        $options['calm'] = [
+            // The label for the option
+            'label' => 'Nicolas Cage is a calm man',
+            'attributes' => [
+                // An image URL in the "data-thumb" attribute
+                'data-thumb' => 'https://www.placecage.com/260/260',
+            ]
+        ];
+        $options['crazy'] = [
+            // The label for the option
+            'label' => 'Nicolas Cage is a crazy man',
+            'attributes' => [
+                // An image URL in the "data-thumb" attribute
+                'data-thumb' => 'https://www.placecage.com/c/260/260',
+            ]
+        ];
+        $event->return = $options;
+    }
 });
 ```
 
