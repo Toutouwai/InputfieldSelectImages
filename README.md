@@ -6,7 +6,13 @@ A module for ProcessWire CMS/CMF. An inputfield that allows the visual selection
 
 ## Integration with FieldtypeDynamicOptions
 
-InputfieldSelectImages was developed to be used together with [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions), although it's not a strict requirement in case you want to use an alternative way to store the field data.
+InputfieldSelectImages was developed to be used together with [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions):
+
+1. Create a Dynamic Options field.
+2. Choose "Select Images" as the "Input field type". Select Images appears in the "Multiple item selection" category but you can set "Maximum number of items" to "1" if you want to use Select Images for single image selections.
+3. Define selectable options for the field via a `FieldtypeDynamicOptions::getSelectableOptions` hook. See some examples below.
+
+But FieldtypeDynamicOptions is not a strict requirement for installing InputfieldSelectImages in case you want to use an alternative way to store the field data.
 
 ### Selection of Pageimages
 
