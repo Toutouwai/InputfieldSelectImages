@@ -1,6 +1,6 @@
 # Select Images 
 
-A module for ProcessWire CMS/CMF. An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.
+A module for ProcessWire CMS/CMF. An inputfield that allows the visual selection and sorting of images, intended for use with [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions).
 
 ![select-images](https://user-images.githubusercontent.com/1538852/115172433-6115b900-a119-11eb-8272-9363cc5f30ab.gif)
 
