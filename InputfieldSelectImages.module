@@ -26,6 +26,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		$this->files_manager = $this->wire()->pages->get(1)->filesManager();
 		$this->labels = [
 			'empty' => $this->_('No images selected.'),
+			'empty_single' => $this->_('No image selected.'),
 			'open' => $this->_('Select images...'),
 			'open_single' => $this->_('Select image...'),
 			'close' => $this->_('Close'),
@@ -105,7 +106,11 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		// Selected images
 		$out = parent::___render();
 		$out .= "<div class='selected-images'>";
-		$empty_label = $this->label_empty ?: $this->labels['empty'];
+		if($this->label_empty) {
+			$empty_label = $this->label_empty;
+		} else {
+			$empty_label = $this->max_items === 1 ? $this->labels['empty_single'] : $this->labels['empty'];
+		}
 		$empty_label_class = $this->value ? ' hide' : '';
 		$out .= "<p class='empty-label{$empty_label_class}'>$empty_label</p>";
 		foreach($this->value as $value) {
