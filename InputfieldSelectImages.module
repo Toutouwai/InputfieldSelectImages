@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.1.0',
+			'version' => '0.1.1',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -46,19 +46,6 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 	public function init() {
 		// Add wrap class for same appearance as core InputfieldImage
 		$this->addClass('InputfieldIsSecondary', 'wrapClass');
-	}
-
-	/**
-	 * Render ready
-	 *
-	 * @param Inputfield|InputfieldWrapper|null
-	 * @param bool $renderValueMode
-	 * @return bool
-	 *
-	 */
-	public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
-		$this->wrapAttr('data-max-items', $this->max_items);
-		return parent::renderReady($parent, $renderValueMode);
 	}
 
 	/**
@@ -114,6 +101,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		$empty_label_class = $this->value ? ' hide' : '';
 		$out .= "<p class='empty-label{$empty_label_class}'>$empty_label</p>";
 		foreach($this->value as $value) {
+			if(!$value) continue;
 			$label = $options[$value];
 			$out .= $this->getThumbMarkup($value, $label);
 		}

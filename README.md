@@ -1,24 +1,24 @@
 # Select Images 
 
-A module for ProcessWire CMS/CMF. An inputfield that allows the visual selection and sorting of images, intended for use with [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions).
+A module for ProcessWire CMS/CMF. An inputfield that allows the visual selection and sorting of images, intended for use with the [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions) module. Together these modules can be used to create a kind of "[image reference](https://github.com/processwire/processwire-requests/issues/207)" field.
 
 ![select-images](https://user-images.githubusercontent.com/1538852/115172433-6115b900-a119-11eb-8272-9363cc5f30ab.gif)
 
 ## Integration with FieldtypeDynamicOptions
 
-InputfieldSelectImages was developed to be used together with [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions):
+InputfieldSelectImages was developed to be used together with [FieldtypeDynamicOptions](https://github.com/Toutouwai/FieldtypeDynamicOptions) (v0.1.3 or newer):
 
 1. Create a Dynamic Options field.
-2. Choose "Select Images" as the "Input field type". Select Images appears in the "Multiple item selection" category but you can set "Maximum number of items" to "1" if you want to use Select Images for single image selections.
+2. Choose "Select Images" as the "Inputfield type". Select Images appears in the "Multiple item selection" category but you can set "Maximum number of items" to 1 if you want to use Select Images for single image selections.
 3. Define selectable options for the field via a `FieldtypeDynamicOptions::getSelectableOptions` hook. See some examples below.
 
-But FieldtypeDynamicOptions is not a strict requirement for installing InputfieldSelectImages in case you want to use an alternative way to store the field data.
+FieldtypeDynamicOptions is recommended but is not a strict requirement for installing InputfieldSelectImages in case you want to use an alternative way to store the field data.
 
 ### Selection of Pageimages
 
 In this example the field allows selection of Pageimages that are in the "images" field of the home page.
 
-The field will store URLs to the Pageimages so it works as a kind of "image reference" field. You can use the "Format as Pagefiles/Pageimages" option for the Dynamic Options field to have the formatted value of the field be automatically converted from the stored Pageimage URLs to Pageimage objects. 
+The field will store URLs to the Pageimages so it works as a kind of "image reference" field. You can use the "Format as Pagefile/Pageimage object(s)" option for the Dynamic Options field to have the formatted value of the field be automatically converted from the stored Pageimage URLs to Pageimage objects. 
 
 ```php
 $wire->addHookAfter('FieldtypeDynamicOptions::getSelectableOptions', function(HookEvent $event) {
@@ -123,3 +123,5 @@ $wire->addHookAfter('FieldtypeDynamicOptions::getSelectableOptions', function(Ho
 ## Field configuration
 
 You can define labels for the button, notices, etc, that are used within the inputfield if the defaults don't suit.
+
+![labels](https://user-images.githubusercontent.com/1538852/126757906-76c4552d-7165-4e4f-aa8e-a3c64f5d274f.png)
