@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.1.1',
+			'version' => '0.1.2',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -18,12 +18,17 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 
 	protected $labels = [];
 
+	protected $inputfield_image = null;
+
 	/**
 	 * Construct
 	 */
 	public function __construct() {
 		parent::__construct();
+		// Set FilesManager instance
 		$this->files_manager = $this->wire()->pages->get(1)->filesManager();
+		// Set InputfieldImage instance
+		$this->inputfield_image = $this->wire()->modules->get('InputfieldImage');
 		$this->labels = [
 			'empty' => $this->_('No images selected.'),
 			'empty_single' => $this->_('No image selected.'),
@@ -63,7 +68,10 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		// Otherwise try and get Pageimage and generate thumb
 		if(!$thumb && strpos($value, '.') !== false) {
 			$pageimage = $this->files_manager->getFile($value);
-			if($pageimage) $thumb = $pageimage->maxSize(260,260, ['upscaling' => true])->url;
+			if($pageimage) {
+				$thumb_array = $this->inputfield_image->getAdminThumb($pageimage);
+				$thumb = $thumb_array['thumb']->url;
+			}
 		}
 		// Abort if no thumb
 		if(!$thumb) return '';
