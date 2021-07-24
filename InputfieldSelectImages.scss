@@ -1,6 +1,6 @@
 .InputfieldSelectImages {
 	select[multiple] { display:none; }
-	.isi-select-button { outline:none;
+	.isi-select-button {
 		&:disabled { background-color:#d8d8d8 !important; cursor:not-allowed; }
 	}
 	// Thumbs

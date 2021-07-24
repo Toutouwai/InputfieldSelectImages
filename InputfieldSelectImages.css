@@ -1,10 +1,8 @@
 .InputfieldSelectImages select[multiple] {
   display: none; }
-.InputfieldSelectImages .isi-select-button {
-  outline: none; }
-  .InputfieldSelectImages .isi-select-button:disabled {
-    background-color: #d8d8d8 !important;
-    cursor: not-allowed; }
+.InputfieldSelectImages .isi-select-button:disabled {
+  background-color: #d8d8d8 !important;
+  cursor: not-allowed; }
 .InputfieldSelectImages .isi-thumb {
   background-color: white;
   padding: 6px;
