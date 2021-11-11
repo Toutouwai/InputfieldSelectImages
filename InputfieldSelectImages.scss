@@ -1,7 +1,7 @@
 .InputfieldSelectImages {
 	select[multiple] { display:none; }
 	.isi-select-button {
-		&:disabled { background-color:#d8d8d8 !important; cursor:not-allowed; }
+		&:disabled { background-color:#d8d8d8 !important; cursor:not-allowed; opacity:1; }
 	}
 	// Thumbs
 	.isi-thumb { background-color:white; padding:6px; border:1px solid #d9e1ea; margin:0 10px 10px 0; cursor:pointer; position:relative; border-radius:2px;
