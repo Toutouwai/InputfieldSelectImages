@@ -98,6 +98,12 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 	public function ___render() {
 		$options = $this->options;
 
+		// Keep current sort order from values
+		$this->options = array_merge(
+			array_flip($this->value ?: []),
+			$this->options
+		);
+
 		// Selected images
 		$out = parent::___render();
 		$out .= "<div class='selected-images'>";
