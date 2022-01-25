@@ -34,7 +34,8 @@
 	function closeSelectable($outer) {
 		var $button = $outer.siblings('.isi-select-button');
 		$button.text($button.data('open-label'));
-		$outer.slideUp(300);
+		// Have to hide instead of slideUp due to buggy Uikit match height
+		$outer.hide();
 	}
 
 	// Check if the maximum number of selected items has been reached
