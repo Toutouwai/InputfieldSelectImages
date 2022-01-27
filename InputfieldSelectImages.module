@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.1.5',
+			'version' => '0.2.0',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -34,6 +34,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 			'empty_single' => $this->_('No image selected.'),
 			'open' => $this->_('Select images...'),
 			'open_single' => $this->_('Select image...'),
+			'replace_single' => $this->_('Replace image...'),
 			'close' => $this->_('Close'),
 			'max' => $this->_('The maximum number of selected images has been reached.'),
 			'unavailable' => $this->_('There are no images available for selection.'),
@@ -51,6 +52,20 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 	public function init() {
 		// Add wrap class for same appearance as core InputfieldImage
 		$this->addClass('InputfieldIsSecondary', 'wrapClass');
+	}
+
+	/**
+	 * Called before render()
+	 *
+	 * @param Inputfield $parent
+	 * @param bool $renderValueMode
+	 * @return bool
+	 *
+	 */
+	public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
+		$this->is_single = $this->max_items === 1;
+		if($this->is_single) $this->wrapClass = 'isi-single';
+		return parent::renderReady($parent, $renderValueMode);
 	}
 
 	/**
@@ -110,7 +125,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		if($this->label_empty) {
 			$empty_label = $this->label_empty;
 		} else {
-			$empty_label = $this->max_items === 1 ? $this->labels['empty_single'] : $this->labels['empty'];
+			$empty_label = $this->is_single ? $this->labels['empty_single'] : $this->labels['empty'];
 		}
 		$empty_label_class = $this->value ? ' hide' : '';
 		$out .= "<p class='empty-label{$empty_label_class}'>$empty_label</p>";
@@ -127,13 +142,32 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 			$selectable .= $this->getThumbMarkup($value, $label);
 		}
 		if($selectable) {
+			$action = 'open';
 			if($this->label_button) {
-				$button_open_label = $this->label_button;
+				$open_label = $this->label_button;
+				$button_label = $open_label;
 			} else {
-				$button_open_label = $this->max_items === 1 ? $this->labels['open_single'] : $this->labels['open'];
+				if($this->is_single) {
+					$open_label = $this->labels['open_single'];
+					$button_label = $open_label;
+					if($this->value) {
+						$button_label = $this->labels['replace_single'];
+						$action = 'replace';
+					}
+				} else {
+					$open_label = $this->labels['open'];
+					$button_label = $open_label;
+				}
 			}
 			$button_max_label = $this->label_max ?: $this->labels['max'];
-			$out .= "<button type='button' class='ui-button isi-select-button' data-open-label='$button_open_label' data-close-label='{$this->labels['close']}' data-max-reached='$button_max_label'>$button_open_label</button>";
+			$out .= "<button type='button' 
+class='ui-button isi-select-button' 
+data-open-label='$open_label' 
+data-close-label='{$this->labels['close']}' 
+data-max-reached='$button_max_label' 
+data-replace-label='{$this->labels['replace_single']}' 
+data-action='$action'
+>$button_label</button>";
 			$out .= "<div class='selectable-images-outer'><div class='selectable-images'>$selectable</div></div>";
 		} else {
 			$out .= $this->label_unavailable ?: $this->labels['unavailable'];

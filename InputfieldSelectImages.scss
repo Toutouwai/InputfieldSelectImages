@@ -1,4 +1,9 @@
 .InputfieldSelectImages {
+	&.isi-single {
+		.selected-images {
+			.isi-thumb { cursor:default; }
+		}
+	}
 	select[multiple] { display:none; }
 	.isi-select-button {
 		&:disabled { background-color:#d8d8d8 !important; cursor:not-allowed; opacity:1; }

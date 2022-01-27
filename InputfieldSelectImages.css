@@ -1,3 +1,5 @@
+.InputfieldSelectImages.isi-single .selected-images .isi-thumb {
+  cursor: default; }
 .InputfieldSelectImages select[multiple] {
   display: none; }
 .InputfieldSelectImages .isi-select-button:disabled {
