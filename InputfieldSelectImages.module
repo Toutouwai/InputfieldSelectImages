@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.2.0',
+			'version' => '0.2.1',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -40,7 +40,10 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 			'unavailable' => $this->_('There are no images available for selection.'),
 		];
 		$this->set('label_empty', '');
+		$this->set('label_empty_single', '');
 		$this->set('label_button', '');
+		$this->set('label_button_single', '');
+		$this->set('label_button_replace_single', '');
 		$this->set('label_max', '');
 		$this->set('label_unavailable', '');
 		$this->set('max_items', 0);
@@ -122,10 +125,10 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		// Selected images
 		$out = parent::___render();
 		$out .= "<div class='selected-images'>";
-		if($this->label_empty) {
-			$empty_label = $this->label_empty;
+		if($this->is_single) {
+			$empty_label = $this->label_empty_single ?: $this->labels['empty_single'];
 		} else {
-			$empty_label = $this->is_single ? $this->labels['empty_single'] : $this->labels['empty'];
+			$empty_label = $this->label_empty ?: $this->labels['empty'];
 		}
 		$empty_label_class = $this->value ? ' hide' : '';
 		$out .= "<p class='empty-label{$empty_label_class}'>$empty_label</p>";
@@ -143,21 +146,17 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		}
 		if($selectable) {
 			$action = 'open';
-			if($this->label_button) {
-				$open_label = $this->label_button;
+			$replace_label = $this->label_button_replace_single ?: $this->labels['replace_single'];
+			if($this->is_single) {
+				$open_label = $this->label_button_single ?: $this->labels['open_single'];
 				$button_label = $open_label;
-			} else {
-				if($this->is_single) {
-					$open_label = $this->labels['open_single'];
-					$button_label = $open_label;
-					if($this->value) {
-						$button_label = $this->labels['replace_single'];
-						$action = 'replace';
-					}
-				} else {
-					$open_label = $this->labels['open'];
-					$button_label = $open_label;
+				if($this->value) {
+					$button_label = $replace_label;
+					$action = 'replace';
 				}
+			} else {
+				$open_label = $this->label_button ?: $this->labels['open'];
+				$button_label = $open_label;
 			}
 			$button_max_label = $this->label_max ?: $this->labels['max'];
 			$out .= "<button type='button' 
@@ -165,7 +164,7 @@ class='ui-button isi-select-button'
 data-open-label='$open_label' 
 data-close-label='{$this->labels['close']}' 
 data-max-reached='$button_max_label' 
-data-replace-label='{$this->labels['replace_single']}' 
+data-replace-label='$replace_label' 
 data-action='$action'
 >$button_label</button>";
 			$out .= "<div class='selectable-images-outer'><div class='selectable-images'>$selectable</div></div>";
@@ -190,8 +189,17 @@ data-action='$action'
 		$f = $modules->get('InputfieldText');
 		$f_name = 'label_empty';
 		$f->name = $f_name;
-		$f->label = $this->_('Empty');
+		$f->label = $this->_('Empty (multiple)');
 		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['empty']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_empty_single';
+		$f->name = $f_name;
+		$f->label = $this->_('Empty (single)');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['empty_single']);
 		$f->value = $this->$f_name;
 		$fs->add($f);
 
@@ -199,8 +207,26 @@ data-action='$action'
 		$f = $modules->get('InputfieldText');
 		$f_name = 'label_button';
 		$f->name = $f_name;
-		$f->label = $this->_('Button');
-		$f->notes = sprintf($this->_('Default: "%s", or "%s" if single'), $this->labels['open'], $this->labels['open_single']);
+		$f->label = $this->_('Select (multiple)');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['open']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_button_single';
+		$f->name = $f_name;
+		$f->label = $this->_('Select (single)');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['open_single']);
+		$f->value = $this->$f_name;
+		$fs->add($f);
+
+		/** @var InputfieldText $f */
+		$f = $modules->get('InputfieldText');
+		$f_name = 'label_button_replace_single';
+		$f->name = $f_name;
+		$f->label = $this->_('Replace (single)');
+		$f->notes = sprintf($this->_('Default: "%s"'), $this->labels['replace_single']);
 		$f->value = $this->$f_name;
 		$fs->add($f);
 
