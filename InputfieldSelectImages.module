@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.2.1',
+			'version' => '0.2.2',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -101,7 +101,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		if($this->isOptionSelected($value)) $class .= ' selected';
 		$out = "<div class='$class' data-value='$value' data-label='$label' $attrs_string>";
 		if($label) $out .= "<div class='image-label'><div class='image-label-text'>$label</div></div>";
-		$out .= "<div class='isi-delete'><span class='fa fa-trash-o'></span></div>";
+		$out .= "<div class='isi-delete'><span class='fa fa-times'></span></div>";
 		$out .= "<img src='$thumb' alt=''>";
 		$out .= "</div>";
 		return $out;
