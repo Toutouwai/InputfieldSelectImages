@@ -11,9 +11,9 @@
 	// Thumbs
 	.isi-thumb { background-color:white; padding:6px; border:1px solid #d9e1ea; margin:0 10px 10px 0; cursor:pointer; position:relative; border-radius:2px;
 		.image-label { position:absolute; z-index:1; left:6px; right:6px; top:6px; bottom:6px; background:rgba(62,185,152,0.7); display:none;
-			.image-label-text { text-align:center; width:100%; word-wrap:break-word; white-space:normal; line-height:1.2; position:relative; top:50%; transform:translateY(-50%); color:white; font-weight:bold; }
+			.image-label-text { text-align:center; width:100%; word-wrap:break-word; white-space:normal; line-height:1.2; position:relative; top:50%; transform:translateY(-50%); color:white; font-weight:bold; padding-left:6px; padding-right:6px; }
 		}
-		.isi-delete { color:#aaaaaa; width:32px; height:32px; background:white; text-align:center; padding:5px 0 0; position:absolute; left:6px; top:6px; z-index:2; display:none; cursor:pointer;
+		.isi-delete { color:#aaaaaa; width:32px; height:32px; background:white; text-align:center; padding:3px 0 0; position:absolute; left:6px; top:6px; z-index:2; display:none; cursor:pointer;
 			&:hover { color:#e83561; }
 		}
 		img { height:160px; }

@@ -33,14 +33,16 @@
       top: 50%;
       transform: translateY(-50%);
       color: white;
-      font-weight: bold; }
+      font-weight: bold;
+      padding-left: 6px;
+      padding-right: 6px; }
   .InputfieldSelectImages .isi-thumb .isi-delete {
     color: #aaaaaa;
     width: 32px;
     height: 32px;
     background: white;
     text-align: center;
-    padding: 5px 0 0;
+    padding: 3px 0 0;
     position: absolute;
     left: 6px;
     top: 6px;
