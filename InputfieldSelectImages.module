@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.2.3',
+			'version' => '0.2.4',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -117,7 +117,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		$options = $this->options;
 
 		// Keep current sort order from values
-		$this->options = array_merge(
+		$this->options = array_replace(
 			array_flip($this->value ?: []),
 			$this->options
 		);
