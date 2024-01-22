@@ -1,0 +1,22 @@
+{
+	"name": "toutouwai/inputfield-select-images",
+	"type": "pw-module",
+	"description": "A ProcessWire inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.",
+	"keywords": [
+		"module",
+		"processwire"
+	],
+	"homepage": "https://github.com/Toutouwai/InputfieldSelectImages",
+	"license": "MPL-2.0",
+	"authors": [
+		{
+			"name": "Robin Sallis",
+			"homepage": "https://github.com/Toutouwai"
+		}
+	],
+	"require": {
+		"php": ">=5.4",
+		"processwire/processwire": ">=3.0.0",
+		"wireframe-framework/processwire-composer-installer": "^1.0.0"
+	}
+}
