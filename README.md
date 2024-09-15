@@ -122,6 +122,8 @@ $wire->addHookAfter('FieldtypeDynamicOptions::getSelectableOptions', function(Ho
 
 ## Field configuration
 
+If the inputfield values are Pageimage URLs then you can optionally include a button for each selected image to open the containing page for editing in a modal window. Note that if the selected image is contained in a Repeater item then it is the Repeater page that will be opened for editing.
+
 You can define labels for the button, notices, etc, that are used within the inputfield if the defaults don't suit.
 
 ![labels](https://user-images.githubusercontent.com/1538852/126757906-76c4552d-7165-4e4f-aa8e-a3c64f5d274f.png)

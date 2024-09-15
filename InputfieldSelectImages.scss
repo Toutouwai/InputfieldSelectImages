@@ -13,7 +13,8 @@
 		.image-label { position:absolute; z-index:1; left:6px; right:6px; top:6px; bottom:6px; background:rgba(62,185,152,0.7); display:none;
 			.image-label-text { text-align:center; width:100%; word-wrap:break-word; white-space:normal; line-height:1.2; position:relative; top:50%; transform:translateY(-50%); color:white; font-weight:bold; padding-left:6px; padding-right:6px; }
 		}
-		.isi-delete { color:#aaaaaa; width:32px; height:32px; background:white; text-align:center; padding:3px 0 0; position:absolute; left:6px; top:6px; z-index:2; display:none; cursor:pointer;
+		.isi-image-buttons { position:absolute; left:6px; top:6px; z-index:2; flex-wrap:wrap; display:none; }
+		.isi-image-button { color:#aaaaaa; width:32px; height:32px; background:white; cursor:pointer; display:flex; justify-content:center; align-items:center;
 			&:hover { color:#e83561; }
 		}
 		img { height:160px; }
@@ -22,14 +23,14 @@
 		}
 	}
 	// Selected images
-	.selected-images { display:flex; flex-flow:row wrap; margin-bottom:5px; /*overflow:auto;*/
+	.selected-images { display:flex; flex-flow:row wrap; margin-bottom:5px;
 		.ui-sortable-placeholder { visibility:visible !important; background:transparent; border-radius:2px; }
 		.empty-label { width:100%;
 			&.hide { display:none; }
 		}
 		.isi-thumb { cursor:move;
 			&:hover {
-				.isi-delete { display:block; }
+				.isi-image-buttons { display:flex; }
 			}
 		}
 	}

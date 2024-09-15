@@ -6,7 +6,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		return array(
 			'title' => 'Select Images',
 			'summary' => 'An inputfield that allows the visual selection and sorting of images, intended for use with FieldtypeDynamicOptions.',
-			'version' => '0.2.5',
+			'version' => '0.3.0',
 			'author' => 'Robin Sallis',
 			'href' => 'https://github.com/Toutouwai/InputfieldSelectImages',
 			'icon' => 'picture-o',
@@ -39,6 +39,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 			'max' => $this->_('The maximum number of selected images has been reached.'),
 			'unavailable' => $this->_('There are no images available for selection.'),
 		];
+		$this->set('edit_button', 0);
 		$this->set('label_empty', '');
 		$this->set('label_empty_single', '');
 		$this->set('label_button', '');
@@ -68,12 +69,15 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 	public function renderReady(Inputfield $parent = null, $renderValueMode = false) {
 		$this->is_single = $this->max_items === 1;
 		if($this->is_single) $this->wrapClass = 'isi-single';
+		if($this->edit_button) $this->wire()->modules->get('JqueryUI')->use('modal');
 		return parent::renderReady($parent, $renderValueMode);
 	}
 
 	/**
 	 * Get markup for a selectable thumbnail image
 	 *
+	 * @param string $value
+	 * @param string $label
 	 * @return string
 	 */
 	protected function getThumbMarkup($value, $label) {
@@ -84,6 +88,7 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		// Use data-thumb attribute if present
 		if(!empty($attrs['data-thumb'])) $thumb = $attrs['data-thumb'];
 		// Otherwise try and get Pageimage and generate thumb
+		$pageimage = null;
 		if(!$thumb && strpos($value, '.') !== false) {
 			$pageimage = $this->files_manager->getFile($value);
 			if($pageimage) {
@@ -101,9 +106,31 @@ class InputfieldSelectImages extends InputfieldSelectMultiple {
 		if($this->isOptionSelected($value)) $class .= ' selected';
 		$out = "<div class='$class' data-value='$value' data-label='$label' $attrs_string>";
 		if($label) $out .= "<div class='image-label'><div class='image-label-text'>$label</div></div>";
-		$out .= "<div class='isi-delete'><span class='fa fa-times'></span></div>";
+		$out .= "<div class='isi-image-buttons'>" . $this->getImageButtons($value, $pageimage) . "</div>";
 		$out .= "<img src='$thumb' alt=''>";
 		$out .= "</div>";
+		return $out;
+	}
+
+	/**
+	 * Get markup for the image buttons
+	 *
+	 * @param string $value
+	 * @param Pageimage|null $pageimage
+	 * @return string
+	 *
+	 */
+	public function ___getImageButtons($value, $pageimage) {
+		$out = "<div class='isi-image-button isi-delete'><span class='fa fa-times'></span></div>";
+		if($this->edit_button && $pageimage) {
+			$field_name = $pageimage->field->name;
+			if($this->edit_button === 2) {
+				$edit_url = $pageimage->page->editUrl() . "&modal=1&field=$field_name";
+			} else {
+				$edit_url = $pageimage->page->editUrl() . "&modal=1#find-$field_name";
+			}
+			$out .= "<a class='isi-image-button isi-edit-page pw-modal pw-modal-medium' href='$edit_url' data-buttons='#submit_save, #submit_publish, #submit_save_unpublished' data-autoclose><span class='fa fa-pencil'></span></a>";
+		}
 		return $out;
 	}
 
@@ -178,6 +205,19 @@ data-action='$action'
 	public function ___getConfigInputfields() {
 		$inputfields = parent::___getConfigInputfields();
 		$modules = $this->wire()->modules;
+
+		/** @var InputfieldRadios $f */
+		$f = $modules->get('InputfieldRadios');
+		$f_name = 'edit_button';
+		$f->name = $f_name;
+		$f->label = $this->_('Modal edit button');
+		$f->description = $this->_('If the values are Pageimage URLs then you can optionally include a button for each selected image to open the containing page for editing in a modal window.');
+		$f->addOption(0, $this->_('No button'));
+		$f->addOption(1, $this->_('Edit page'));
+		$f->addOption(2, $this->_('Edit page (image field only)'));
+		$f->optionColumns = 1;
+		$f->value = $this->$f_name;
+		$inputfields->add($f);
 
 		/** @var InputfieldFieldset $f */
 		$fs = $modules->get('InputfieldFieldset');
